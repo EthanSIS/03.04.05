@@ -131,8 +131,10 @@ def receive_ack(msg: Msg):
 def send_msg(msgId:int, payload:List[int], userId:int, dest:int):
     '''
     Envoie un message.
+    
     1) Crée un objet Message à partir des paramètres
     En boucle jusqu'à un timeout ou ack: 
+    message = Message(dest ,userId, payload)
         2) Conversion objet Message en trame et envoi 
         3) Attend et check le ack
     4) Incrémentation du numéro de séquence
