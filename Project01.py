@@ -134,9 +134,9 @@ def send_msg(msgId:int, payload:List[int], userId:int, dest:int):
     
     1) Crée un objet Message à partir des paramètres
     message = Message(dest ,userId, payload#il manque des trucs ici, voir la classe message)
-    time = time.time()
+    #time = time.time()
     En boucle jusqu'à un timeout ou ack: 
-    while 
+    #while 
         2) Conversion objet Message en trame et envoi  
         radio.send_bytes(msg_to_trame(message))#la fonction msg to trame a pas encore été complétée
 
