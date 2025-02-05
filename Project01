@@ -145,6 +145,7 @@ def send_msg(msgId:int, payload:List[int], userId:int, dest:int):
                     acked(bool): True si message acké, sinon False
     '''
     global seqNum
+    message = }
     pass # à compléter
 
 def receive_msg(userId:int):
