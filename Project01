@@ -133,10 +133,12 @@ def send_msg(msgId:int, payload:List[int], userId:int, dest:int):
     Envoie un message.
     
     1) Crée un objet Message à partir des paramètres
-    En boucle jusqu'à un timeout ou ack: 
     message = Message(dest ,userId, payload#il manque des trucs ici, voir la classe message)
+    time = time.time ()
+    En boucle jusqu'à un timeout ou ack: 
+    while 
         2) Conversion objet Message en trame et envoi  
-        msg_to_trame(message) #la fonction msg to trame a pas encore été complétée
+        radio.send_bytes(msg_to_trame(message))#la fonction msg to trame a pas encore été complétée
 
         3) Attend et check le ack
     4) Incrémentation du numéro de séquence
