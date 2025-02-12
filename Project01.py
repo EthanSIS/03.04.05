@@ -18,7 +18,7 @@ Timeout = 300
 ackMsgId = 255
 
 #### Start radio module ####
-radio.config(channel=7, address=77)
+radio.config(channel= 7, address=77)
 radio.on()
 
 
@@ -191,25 +191,24 @@ def receive_msg(userId:int):
 
 if __name__ == '__main__':
     
-    userId = 0
+    userId = 12
 
     while True:
         # Messages à envoyer
-        destId = 1
+        destId = 7
         if button_a.was_pressed():
             send_msg(1,[60],userId, destId)
             
 
                 
         # Reception des messages
-        m = receive_msg(userId)        
-        if m and m.msgId==1:
+       
+           
+        if m and m.msgId==1 :
             display.show(Image.SQUARE)
 
             
 
-                
-      
-            
+  
             
 
