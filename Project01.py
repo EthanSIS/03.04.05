@@ -128,7 +128,14 @@ def receive_ack(msg: Msg):
     pass # à compléter
     
 
+
+  
 def send_msg(msgId:int, payload:List[int], userId:int, dest:int):
+    global seqNum
+    
+    msg = [msgId] + payload
+    radio.send_bytes(int_to_bytes(msg))
+
     '''
     Envoie un message.
     
