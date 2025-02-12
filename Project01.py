@@ -132,8 +132,8 @@ def receive_ack(msg: Msg):
 def send_msg(msgId:int, payload:List[int], userId:int, dest:int):
     global seqNum
     
-    msf = [msgId] + paylod
-    radio.send_bytes(int_to_nytes(msg))
+    msg = [msgId] + payload
+    radio.send_bytes(int_to_bytes(msg))
     
     
     
