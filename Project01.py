@@ -209,10 +209,7 @@ if __name__ == '__main__':
             
 
                 
-        # Reception des messages
-        m = receive_msg(userId)        
-        if m and m.msgId==1:
-            display.show(Image.SQUARE)
+      
             
             
 
