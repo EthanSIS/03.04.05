@@ -57,13 +57,13 @@ def bytes_to_int(bytesPayload:bytes):
                     bytesPayload(bytes): payload in bytes format
             Returns:
                     intPayload(List[int]): payload in int format
-    ''''''
+    '''
     intPayload = []
     for i in bytesPayload:
         intPayload.append(ord(bytes([i])))        
     return intPayload
-     ''''''
-'''
+    
+
 def int_to_bytes(intPayload:List[int]):    
     '''
     Convert  List[int] to bytes object 
@@ -133,6 +133,7 @@ def send_msg(msgId:int, payload:List[int], userId:int, dest:int):
     global seqNum
     
     msg = [msgId] + payload
+    print("msg :",msg)
     radio.send_bytes(int_to_bytes(msg))
     
     
@@ -168,8 +169,10 @@ def send_msg(msgId:int, payload:List[int], userId:int, dest:int):
 def receive_msg(userId:int):
     
     new_trame = radio.receive_bytes()
+#     print(new_trame, "trame1")
     if new_trame:
         trame = bytes_to_int(new_trame)
+        print("trame:",trame)
         msgObj = Message(None,None,None, trame[0], trame[1], None)
         
         return msgObj
@@ -212,3 +215,4 @@ if __name__ == '__main__':
             display.show(Image.SQUARE)
             
             
+
