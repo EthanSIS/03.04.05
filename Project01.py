@@ -18,7 +18,7 @@ Timeout = 300
 ackMsgId = 255
 
 #### Start radio module ####
-radio.config(channel=7, address=50)
+radio.config(channel=7, address=77)
 radio.on()
 
 
@@ -38,6 +38,7 @@ class Message:
     self.msgId = msgId
     self.payload = payload
     self.crc = crc
+    
   def msgStr(self):
     '''
     Crée une string contenant les détails du message
@@ -45,9 +46,9 @@ class Message:
                     self(Message): objet message
             Returns:
                     msgStr(str): string contenant les détails du message
-    '''
+    
       return str(self.exped)+ " -> "+ str(self.dest)+ "n[" + str(self.seqNum)+ "] "+ " : type "+ str(self.msgId)+" : " +str(self.payload)+ " (crc="+ str(self.crc)+")"
-
+     '''
 #### Toolbox ####
 def bytes_to_int(bytesPayload:bytes):
     '''
@@ -56,13 +57,13 @@ def bytes_to_int(bytesPayload:bytes):
                     bytesPayload(bytes): payload in bytes format
             Returns:
                     intPayload(List[int]): payload in int format
-    '''
+    ''''''
     intPayload = []
     for i in bytesPayload:
         intPayload.append(ord(bytes([i])))        
     return intPayload
-
-
+     ''''''
+'''
 def int_to_bytes(intPayload:List[int]):    
     '''
     Convert  List[int] to bytes object 
@@ -201,7 +202,7 @@ if __name__ == '__main__':
         m = receive_msg(userId)        
         if m and m.msgId==1:
             display.show(Image.SQUARE)
-stId)
+
             
 
                 
@@ -209,3 +210,5 @@ stId)
         m = receive_msg(userId)        
         if m and m.msgId==1:
             display.show(Image.SQUARE)
+            
+            
