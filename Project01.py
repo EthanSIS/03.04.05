@@ -2,9 +2,9 @@
 OC Robotique 2025
 Template pour librairie Protocole Réseau pour Micro:bit
 
-Auteur·ice : Etannol, Chloé et Marcos
-Version : 1.1
-Date : 05.02.25
+Auteur·ice : Ethan, Chloé et Marcos
+Version : 1.2
+Date : 12.02.25
 '''
 
 #### Libraries ####
