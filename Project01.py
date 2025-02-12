@@ -128,14 +128,19 @@ def receive_ack(msg: Msg):
     pass # à compléter
     
 
-
-  
 def send_msg(msgId:int, payload:List[int], userId:int, dest:int):
     global seqNum
     
-    msg = [msgId] + payload
-    radio.send_bytes(int_to_bytes(msg))
-
+    msf = [msgId] + paylod
+    radio.send_bytes(int_to_nytes(msg))
+    
+    
+    
+    
+    
+    
+    
+    
     '''
     Envoie un message.
     
@@ -157,11 +162,16 @@ def send_msg(msgId:int, payload:List[int], userId:int, dest:int):
             Returns:
                     acked(bool): True si message acké, sinon False
     '''
-    global seqNum
-    message =}
-    pass # à compléter
+   
 
 def receive_msg(userId:int):
+    
+    new_trame = radio.receive_bytes()
+    if new_trame:
+        trame = bytes_to_int(new_trame)
+        msgObj = Message(None,None,None, trame[0], trame[1], None)
+        
+        return msgObj
     '''
     Attend un message.
     1) Récupère les messages recus
@@ -184,6 +194,14 @@ if __name__ == '__main__':
         destId = 1
         if button_a.was_pressed():
             send_msg(1,[60],userId, destId)
+            
+
+                
+        # Reception des messages
+        m = receive_msg(userId)        
+        if m and m.msgId==1:
+            display.show(Image.SQUARE)
+stId)
             
 
                 
