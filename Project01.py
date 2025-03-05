@@ -103,7 +103,11 @@ def trame_to_msg(trame : bytes, userId :int):
     pass # à compléter
     
     
-def ack_msg(msg : Message):
+def ack_msg():
+    global trame
+    liste_ack = trame[4] + trame[3] + [SeqNum] + [255]
+    radio.send_bytes(int_to_bytes(liste_ack))
+    
     '''
     Envoie un ack du message recu.
     1) Création d'une liste de int correspondant au ack dans l'ordre du protocole
@@ -116,6 +120,17 @@ def ack_msg(msg : Message):
 
 
 def receive_ack(msg: Msg):
+    
+    new_trame = radio.receive_bytes()
+#     print(new_trame, "trame1")
+    if new_trame:
+        ack = bytes_to_int(new_trame)
+        print("ack:",ack)
+        if userId == trame[0] and trame[2] == SeqNum:
+            
+ # peut-être c'est mieux un while not, tant que c'est pas bon on renvoie  + (timeout)       
+            
+            return msgObj
     '''
     Attend un ack correspondant au message recu.
     1) Récupère les messages recus
@@ -132,7 +147,7 @@ def receive_ack(msg: Msg):
 def send_msg(msgId:int, payload:List[int], userId:int, dest:int):
     global seqNum
     
-    msg = [msgId] + payload + [userId] + [dest]
+    msg = [msgId] + payload + [seqNum] + [userId] + [dest] 
     print("msg :",msg)
     radio.send_bytes(int_to_bytes(msg))
     
@@ -173,8 +188,9 @@ def receive_msg(userId:int):
     if new_trame:
         trame = bytes_to_int(new_trame)
         print("trame:",trame)
-        msgObj = Message(trame[3],trame[2],None, trame[0], trame[1], None)
+        msgObj = Message(trame[4],trame[3], trame[2], trame[0], trame[1], None)
         if userId == trame[3]:
+            
             return msgObj
     '''
     Attend un message.
@@ -191,11 +207,11 @@ def receive_msg(userId:int):
 
 if __name__ == '__main__':
     
-    userId = 7
+    userId = 12
 
     while True:
         # Messages à envoyer
-        destId = 12
+        destId = 7
         if button_a.was_pressed():
             send_msg(1,[60],userId, destId)
             
@@ -203,9 +219,7 @@ if __name__ == '__main__':
                 
         # Reception des messages
        
-        m=receive_msg(userId)   
+        m = receive_msg(userId)   
         if m and m.msgId==1 :
             display.show(Image.SQUARE)
-
-
 
