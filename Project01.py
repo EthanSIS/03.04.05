@@ -173,9 +173,9 @@ def receive_msg(userId:int):
     if new_trame:
         trame = bytes_to_int(new_trame)
         print("trame:",trame)
-        msgObj = Message(None,None,None, trame[0], trame[1], None)
-        
-        return msgObj
+        msgObj = Message(trame[3],trame[2],None, trame[0], trame[1], None)
+        if userId == trame[3]:
+            return msgObj
     '''
     Attend un message.
     1) Récupère les messages recus
@@ -191,11 +191,11 @@ def receive_msg(userId:int):
 
 if __name__ == '__main__':
     
-    userId = 12
+    userId = 7
 
     while True:
         # Messages à envoyer
-        destId = 7
+        destId = 12
         if button_a.was_pressed():
             send_msg(1,[60],userId, destId)
             
@@ -203,12 +203,8 @@ if __name__ == '__main__':
                 
         # Reception des messages
        
-        m = receive_message   
+        m=receive_msg(userId)   
         if m and m.msgId==1 :
             display.show(Image.SQUARE)
 
-            
-
-  
-            
 
