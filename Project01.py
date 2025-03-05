@@ -132,7 +132,7 @@ def receive_ack(msg: Msg):
 def send_msg(msgId:int, payload:List[int], userId:int, dest:int):
     global seqNum
     
-    msg = [msgId] + payload
+    msg = [msgId] + payload + [userId] + [dest]
     print("msg :",msg)
     radio.send_bytes(int_to_bytes(msg))
     
@@ -206,5 +206,6 @@ if __name__ == '__main__':
         m=receive_msg(userId)   
         if m and m.msgId==1 :
             display.show(Image.SQUARE)
+
 
 
