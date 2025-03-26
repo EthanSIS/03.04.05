@@ -1,1 +1,26 @@
+from maprincess import *
+from microbit import *
 
+
+#     
+#    /''''^''''\
+#   /  L1 M R1  \
+#  |             |/
+#  |L2         R2|
+# o|.............|o
+# led_brightness(255)
+# led_rgb(Color.BLUE, ColorLED.L2)
+# led_rgb(Color.GREEN, ColorLED.L1)
+# led_rgb(Color.RED, ColorLED.R1)
+# led_rgb(Color.BLUE, ColorLED.R2)
+
+SPEED = 30
+
+while True :
+    if line_sensor(LineSensor.R2)==0 and line_sensor(LineSensor.R1)==1 :
+        motor_run(Motor.ALL, 30)
+    if line_sensor(LineSensor.R1)==0 and line_sensor(LineSensor.L1)==0 and line_sensor(LineSensor.M)==0:
+        motor_stop()
+        motor_run(Motor.RIGHT, 30)
+        motor_run(Motor.LEFT, -30)
+        sleep(500)
