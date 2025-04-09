@@ -10,9 +10,10 @@ from microbit import *
 # o|.............|o
 
 speed = 30
+mini_speed = 10
 BLACK = 1
 WHITE = 0
-
+led_rgb(Color.WHITE)
 def tourner_droite():
     motor_stop()
     sleep(200)
@@ -28,14 +29,37 @@ def tourner_gauche():
     motor_run(Motor.LEFT, speed, 1)
     sleep(1900)
     motor_stop()
-    
 
+def follow_line_R2(speed):
+    if line_sensor(LineSensor.M)==BLACK:
+         motor_run(Motor.LEFT,speed)
+         motor_run(Motor.RIGHT,speed+10,1)
+    if line_sensor(LineSensor.R2)==WHITE:
+         motor_run(Motor.RIGHT,speed)
+         motor_run(Motor.LEFT,speed+10,1)
 
+ 
 while True :
     if line_sensor(LineSensor.R2)==1 :
         motor_run(Motor.ALL, 30)
-        sleep(500)
+        sleep(200)
         motor_stop()
+    if line_sensor(LineSensor.R1) ==1 and line_sensor(LineSensor.M)==1 and line_sensor(LineSensor.L1)==1 and line_sensor(LineSensor.R2)==1:
+        tourner_gauche()
+        motor_stop()
+        sleep(5000)
+        follow_line_R2(speed)
+
+            
+    
+    if line_sensor(LineSensor.R1) ==0 and line_sensor(LineSensor.M)==0 and line_sensor(LineSensor.L1)==0 and line_sensor(LineSensor.R2)==0:
+         tourner_droite()
+         while line_sensor(LineSensor.R2) == 0 :
+            motor_run(Motor.RIGHT, mini_speed)
+            motor_run(Motor.LEFT, speed)
+            sleep(200)
+    
+    
 #     if line_sensor(LineSensor.M)==1:
 #         led_red(True)
 #         motor_stop()
