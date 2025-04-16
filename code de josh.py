@@ -1,6 +1,6 @@
 "projet labiryth Joshua Ethan"
 from microbit import *
-#from protocole import *
+from protocole import *
 from maprincess import *
 
 # CONSTANTES
@@ -10,7 +10,21 @@ BLACK=1
 WHITE=0
 SPEED = 50
 LOOP=True
-
+userId=14
+destId=15
+def disco():
+    led_rgb(Color.BLUE)
+    sleep(100)
+    led_rgb(Color.RED)
+    sleep(100)
+    led_rgb(Color.GREEN)
+    sleep(100)
+    led_rgb(Color.PURPLE)
+    sleep(100)
+    led_rgb(Color.BLUE)
+    sleep(100)
+    led_rgb(Color.YELLOW)
+    sleep(100)
 def forward():
     motor_run(Motor.ALL,SPEED)
     line_sensor_data_all()
@@ -63,6 +77,10 @@ while LOOP:
         
     else:
         follow_line_L2(SPEED)
-    if button_a.is_pressed():
+    if button_a.is_pressed() or ultrasonic()<=5:
+        send_msg(1,[60],userId, destId)
+        led_rgb(Color.GREEN)
         motor_stop()
         LOOP=False
+while LOOP==False:
+    disco()	
