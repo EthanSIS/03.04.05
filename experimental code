@@ -1,0 +1,107 @@
+"projet labiryth Joshua Ethan"
+from microbit import *
+from protocole import *
+from maprincess import *
+import time
+# CONSTANTES
+MOTOR_FORWARD = 0
+MOTOR_BACKWARD = 1
+BLACK=1
+WHITE=0
+SPEED = 100
+LOOP=True
+userId=14
+destId=15
+def forward():
+    motor_run(Motor.ALL,SPEED)
+def backward():
+    motor_run(Motor.ALL,SPEED,1)
+    
+def left():
+    motor_run(Motor.LEFT,SPEED,1)
+    motor_run(Motor.RIGHT,SPEED)
+def right():
+    motor_run(Motor.LEFT,SPEED)
+    motor_run(Motor.RIGHT,SPEED,1)
+    
+class PIDController:
+    def __init__(self, kp, ki, kd, setpoint):
+        self.kp = kp
+        self.ki = ki
+        self.kd = kd
+        self.setpoint = setpoint
+        self.integral = 0
+        self.last_error = 0
+
+    def update(self, measurement, dt):
+        error = self.setpoint - measurement
+        self.integral += error * dt
+        derivative = (error - self.last_error) / dt
+        self.last_error = error
+        output = (self.kp * error) + (self.ki * self.integral) + (self.kd * derivative)
+        return output
+
+# Setpoint for tracking black line (IR sensor value ~55)
+pid = PIDController(kp=0.5, ki=0.01, kd=1, setpoint=55)
+
+# Main loop
+
+def follow_line_step():
+    base_speed = 120 # base forward speed (tune to your liking)
+    max_speed = 255
+    ir_value = line_sensor_data(LineSensor.L2)
+    dt = 0.05
+    correction = pid.update(ir_value, dt)
+
+    threshold = 60  # threshold for sharp correction (tune this too)
+
+    if abs(correction) < threshold:
+        # Small correction: adjust speeds normally
+        left_speed = int(max(min(base_speed + correction, max_speed), 0))
+        right_speed = int(max(min(base_speed - correction, max_speed), 0))
+        motor_run(Motor.LEFT, left_speed)
+        motor_run(Motor.RIGHT, right_speed)
+
+    elif correction >= threshold:
+        # Sharp turn right: reverse right motor
+        motor_run(Motor.LEFT, base_speed)
+        motor_run(Motor.RIGHT, base_speed//3, 1)  # reverse right
+
+    elif correction <= -threshold:
+        # Sharp turn left: reverse left motor
+        motor_run(Motor.RIGHT, base_speed)
+        motor_run(Motor.LEFT, base_speed//3, 1)  # reverse left
+
+    time.sleep(dt)
+
+
+    
+while LOOP:
+    R1 = line_sensor(LineSensor.R1)
+    R2 = line_sensor(LineSensor.R2)
+    L1 = line_sensor(LineSensor.L1)
+    L2 = line_sensor(LineSensor.L2)
+    M = line_sensor(LineSensor.M)
+
+    led_rgb(Color.WHITE)
+    #print(line_sensor_data_all())
+    if R2==WHITE and M==BLACK and R1==BLACK and L1==BLACK:
+        led_rgb(Color.PURPLE)
+        right()
+        sleep(300) 
+    else:
+        follow_line_step()
+
+    print(ultrasonic())
+    if button_a.is_pressed()or 2 < ultrasonic()<=5:
+        send_msg(1,[60],userId, destId)
+        led_rgb(Color.GREEN)
+        motor_stop()
+        LOOP=False
+
+
+
+
+
+
+
