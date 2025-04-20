@@ -10,6 +10,7 @@ WHITE=0
 SPEED = 100
 LOOP=False
 WAIT=True
+fin=False
 userId=14
 destId=15
 def forward():
@@ -75,49 +76,56 @@ def follow_line_step():
         motor_run(Motor.RIGHT, base_speed)
         motor_run(Motor.LEFT, base_speed//2, 1)  # reverse left
     sleep(dt)
+ 
+while True:
+    while WAIT:
+        if button_b.is_pressed():
+            display.show(3)
+            sleep(1000)
+            display.show(2)
+            sleep(1000)
+            display.show(1)
+            sleep(1000)
+            display.show(0)
+            start_time = running_time()
+            sleep(10)
+            display.clear()
+            LOOP=True
+            WAIT=False
+    while LOOP:
+        fin=False
+        R1 = line_sensor(LineSensor.R1)
+        R2 = line_sensor(LineSensor.R2)
+        L1 = line_sensor(LineSensor.L1)
+        L2 = line_sensor(LineSensor.L2)
+        M = line_sensor(LineSensor.M)
 
-while WAIT:
-    if button_b.is_pressed():
-        display.show(3)
-        sleep(1000)
-        display.show(2)
-        sleep(1000)
-        display.show(1)
-        sleep(1000)
-        display.show(0)
-        sleep(10)
-        display.clear()
-        LOOP=True
-        WAIT=False
-while LOOP:
-    R1 = line_sensor(LineSensor.R1)
-    R2 = line_sensor(LineSensor.R2)
-    L1 = line_sensor(LineSensor.L1)
-    L2 = line_sensor(LineSensor.L2)
-    M = line_sensor(LineSensor.M)
-
-    led_rgb(Color.WHITE)
-    #print(line_sensor_data_all())
-    if M==BLACK and L1==BLACK:
-        led_rgb(Color.PURPLE)
-        right() 
-    else:
-        follow_line_step()
-
-    print(ultrasonic())
-    if button_a.is_pressed() or 2 < ultrasonic()<=5:
-        send_msg(1,[60],userId, destId)
-        led_rgb(Color.GREEN)
-        motor_stop()
-        LOOP=False
-
-
-
-
-
-
-
-
+        led_rgb(Color.WHITE)
+        #print(line_sensor_data_all())
+        if M==BLACK and L1==BLACK:
+            led_rgb(Color.PURPLE)
+            right() 
+        else:
+            follow_line_step()
+        time=running_time()
+        print((time-start_time)/1000)
+        #if 5<ultrasonic()<20:
+        #    fin=True
+        #    led_rgb(Color.YELLOW)
+        #    motor_stop()
+        #    forward()
+        #    sleep(200)
+        if button_a.is_pressed() or 2 < ultrasonic()<=5:
+            motor_stop()
+            led_rgb(Color.GREEN)
+            end_time=running_time()
+            elapsed_time=(end_time-start_time)/1000
+            print(elapsed_time,"s")
+            send_msg(1,[60],userId, destId)
+            display.scroll(str(elapsed_time//1000)+"s")
+            #fin=True
+            LOOP=False
+            WAIT=True
 
 
 
