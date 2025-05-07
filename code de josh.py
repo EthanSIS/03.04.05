@@ -10,8 +10,8 @@ SPEED = 100
 LOOP=False
 WAIT=True
 fin=False
-userId=14
-destId=15
+userId=15
+destId=14
 def forward():
     motor_run(Motor.ALL,SPEED)
 def backward():
@@ -86,13 +86,14 @@ while True:
                 display.show(1)
                 sleep(1000)
                 display.show(0)
-                start_time = running_time()
+                
                 sleep(10)
                 display.clear()
                 LOOP=True
                 WAIT=False
-         m = receive_msg(userId)
-         if m and m.msgID==1:
+        m = receive_msg(userId)
+        if m:
+             start_time = running_time()
              LOOP=True
              WAIT=False
     while LOOP:
@@ -118,15 +119,17 @@ while True:
             #    motor_stop()
             #    forward()
             #    sleep(200)
-            if button_a.is_pressed() or 2 < ultrasonic()<=5:
+            if  2 < ultrasonic()<=5:
                 motor_stop()
                 led_rgb(Color.GREEN)
                 end_time=running_time()
                 elapsed_time=(end_time-start_time)/1000
                 print(elapsed_time,"s")
-                send_msg(1,[60],userId, destId)
+                send_msg(1,[elapsed_time],userId, destId)
                 display.scroll(str(elapsed_time//1000)+"s")
                 #fin=True
                 LOOP=False
                 WAIT=True
-
+            if button_a.is_pressed() :
+                WAIT = True
+                LOOP=False
