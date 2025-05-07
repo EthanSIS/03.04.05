@@ -10,8 +10,8 @@ SPEED = 100
 LOOP=False
 WAIT=True
 fin=False
-userId=15
-destId=14
+userId=14
+destId=15
 def forward():
     motor_run(Motor.ALL,SPEED)
 def backward():
@@ -50,7 +50,7 @@ pid = PIDController(kp=0.5, ki=0.01, kd=0.6, setpoint=55)
 
 
 def follow_line_step():
-    base_speed = 160
+    base_speed = 200
     max_speed = 255
     ir_value = line_sensor_data(LineSensor.L2)
     dt = 0.05
@@ -86,7 +86,7 @@ while True:
                 display.show(1)
                 sleep(1000)
                 display.show(0)
-                
+                start_time = running_time()
                 sleep(10)
                 display.clear()
                 LOOP=True
@@ -119,7 +119,7 @@ while True:
             #    motor_stop()
             #    forward()
             #    sleep(200)
-            if  2 < ultrasonic()<=5:
+            if 2 < ultrasonic()<=5:
                 motor_stop()
                 led_rgb(Color.GREEN)
                 end_time=running_time()
@@ -130,6 +130,6 @@ while True:
                 #fin=True
                 LOOP=False
                 WAIT=True
-            if button_a.is_pressed() :
-                WAIT = True
+            if button_a.is_pressed():
                 LOOP=False
+                WAIT=True
