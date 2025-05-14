@@ -1,3 +1,4 @@
+"projet labiryth Joshua Ethan"
 from microbit import *
 from miniprotocole import *
 from maprincess import *
@@ -50,7 +51,7 @@ pid = PIDController(kp=0.5, ki=0.01, kd=0.6, setpoint=55)
 
 
 def follow_line_step():
-    base_speed = 200
+    base_speed = 160
     max_speed = 255
     ir_value = line_sensor_data(LineSensor.L2)
     dt = 0.05
@@ -79,57 +80,58 @@ def follow_line_step():
 while True:
     while WAIT:
         if button_b.is_pressed():
-                display.show(3)
-                sleep(1000)
-                display.show(2)
-                sleep(1000)
-                display.show(1)
-                sleep(1000)
-                display.show(0)
-                start_time = running_time()
-                sleep(10)
-                display.clear()
-                LOOP=True
-                WAIT=False
-        m = receive_msg(userId)
-        if m:
-             start_time = running_time()
-             LOOP=True
-             WAIT=False
+            display.show(3)
+            sleep(1000)
+            display.show(2)
+            sleep(1000)
+            display.show(1)
+            sleep(1000)
+            display.show(0)
+            start_time = running_time()
+            sleep(10)
+            display.clear()
+            LOOP=True
+            WAIT=False
     while LOOP:
-            fin=False
-            R1 = line_sensor(LineSensor.R1)
-            R2 = line_sensor(LineSensor.R2)
-            L1 = line_sensor(LineSensor.L1)
-            L2 = line_sensor(LineSensor.L2)
-            M = line_sensor(LineSensor.M)
+        fin=False
+        R1 = line_sensor(LineSensor.R1)
+        R2 = line_sensor(LineSensor.R2)
+        L1 = line_sensor(LineSensor.L1)
+        L2 = line_sensor(LineSensor.L2)
+        M = line_sensor(LineSensor.M)
 
-            led_rgb(Color.WHITE)
-            #print(line_sensor_data_all())
-            if M==BLACK and L1==BLACK:
-                led_rgb(Color.PURPLE)
-                right() 
-            else:
-                follow_line_step()
-            time=running_time()
-            print((time-start_time)/1000)
-            #if 5<ultrasonic()<20:
-            #    fin=True
-            #    led_rgb(Color.YELLOW)
-            #    motor_stop()
-            #    forward()
-            #    sleep(200)
-            if 2 < ultrasonic()<=5:
-                motor_stop()
-                led_rgb(Color.GREEN)
-                end_time=running_time()
-                elapsed_time=(end_time-start_time)/1000
-                print(elapsed_time,"s")
-                send_msg(1,[elapsed_time],userId, destId)
-                display.scroll(str(elapsed_time//1000)+"s")
-                #fin=True
-                LOOP=False
-                WAIT=True
-            if button_a.is_pressed():
-                LOOP=False
-                WAIT=True
+        led_rgb(Color.WHITE)
+        #print(line_sensor_data_all())
+        if M==BLACK and L1==BLACK:
+            led_rgb(Color.PURPLE)
+            right() 
+        else:
+            follow_line_step()
+        time=running_time()
+        print((time-start_time)/1000)
+        #if 5<ultrasonic()<20:
+        #    fin=True
+        #    led_rgb(Color.YELLOW)
+        #    motor_stop()
+        #    forward()
+        #    sleep(200)
+        if button_a.is_pressed() or 2 < ultrasonic()<=5:
+            motor_stop()
+            led_rgb(Color.GREEN)
+            end_time=running_time()
+            elapsed_time=(end_time-start_time)/1000
+            print(elapsed_time,"s")
+            send_msg(1,[60],userId, destId)
+            LOOP=False
+            WAIT=True
+            sleep(1000)
+            display.scroll(str(elapsed_time//1000)+"s")
+            #fin=True
+            
+
+
+
+
+
+
+
