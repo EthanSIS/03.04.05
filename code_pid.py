@@ -47,7 +47,7 @@ class PIDController:
         return output
 
 # Setpoint for tracking black line (IR sensor value ~55)
-pid = PIDController(kp=0.5, ki=0.01, kd=0.6, setpoint=55)
+pid = PIDController(kp=0.5, ki=0.02, kd=0.8, setpoint=100)
 
 
 def follow_line_step():
@@ -94,8 +94,9 @@ while True:
                 WAIT=False
         m = receive_msg(userId)
         if m:
-             start_time=running_time
+             start_time=running_time()
              other_time = m.payload[0]
+             print(other_time,"s")
              LOOP=True
              WAIT=False
              
@@ -113,17 +114,17 @@ while True:
                 right() 
             else:
                 follow_line_step()
-            end_time=running_time()
-            elapsed_time=(end_time-start_time)
-            print(elapsed_time/1000)
             if 2 < ultrasonic()<=5:
                 motor_stop()
                 led_rgb(Color.GREEN)
-                total_time=(elapsed_time+time)//1000
+                end_time=running_time()
+                elapsed_time=(end_time-start_time)
+                print(elapsed_time//1000,"s")
+                total_time=(elapsed_time//1000+other_time)
                 print(total_time,"s")
                 if other_time==0:
                     send_msg(1,[elapsed_time//1000],userId, destId)
-                print("msg sent")
+                    print("msg sent")
                 display.scroll(str(total_time)+"s")
                 display.scroll(str(total_time)+"s")
                 LOOP=False
