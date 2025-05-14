@@ -13,7 +13,7 @@ fin=False
 time=0
 elapsed_time=0
 userId=14
-destId=15
+destId=14
 def forward():
     motor_run(Motor.ALL,SPEED)
 def backward():
@@ -77,7 +77,7 @@ def follow_line_step():
         motor_run(Motor.RIGHT, base_speed)
         motor_run(Motor.LEFT, base_speed//2, 1)  # reverse left
     sleep(dt)
- 
+motor_stop()
 while True:
     while WAIT:
         if button_b.is_pressed():
@@ -88,14 +88,14 @@ while True:
                 display.show(1)
                 sleep(1000)
                 display.show(0)
-                start_time = running_time()
                 sleep(10)
                 display.clear()
+                start_time = running_time()
                 LOOP=True
                 WAIT=False
         m = receive_msg(userId)
         if m:
-             start_time = running_time()
+             start_time = m.payload[0]
              LOOP=True
              WAIT=False
              
@@ -113,22 +113,21 @@ while True:
                 right() 
             else:
                 follow_line_step()
-            time=running_time()
-            print((time-start_time)/1000)
-            if button_a.is_pressed() or 2 < ultrasonic()<=5:
-                if m:
-                    time=m.payload[0]
+            time=0
+            end_time=running_time()
+            elapsed_time=(end_time-start_time)
+            print(elapsed_time/1000)
+            if 2 < ultrasonic()<=5:
                 motor_stop()
                 led_rgb(Color.GREEN)
-                end_time=running_time()
-                elapsed_time=(end_time-start_time)
-                total_time=(elasped_time+time)//1000
+                total_time=(elapsed_time+time)//1000
                 print(total_time,"s")
-                send_msg(1,[int(elapsed_time)],userId, destId)
+                send_msg(1,[elapsed_time//1000],userId, destId)
                 print("msg sent")
                 display.scroll(str(total_time)+"s")
-                #fin=True
+                display.scroll(str(total_time)+"s")
+                LOOP=False
+            if button_a.is_pressed():
+                motor_stop()
                 LOOP=False
                 WAIT=True
-
-
