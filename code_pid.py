@@ -9,8 +9,7 @@ WHITE=0
 SPEED = 100
 LOOP=False
 WAIT=True
-fin=False
-time=0
+other_time=0
 elapsed_time=0
 userId=14
 destId=14
@@ -95,7 +94,8 @@ while True:
                 WAIT=False
         m = receive_msg(userId)
         if m:
-             start_time = m.payload[0]
+             start_time=running_time
+             other_time = m.payload[0]
              LOOP=True
              WAIT=False
              
@@ -113,7 +113,6 @@ while True:
                 right() 
             else:
                 follow_line_step()
-            time=0
             end_time=running_time()
             elapsed_time=(end_time-start_time)
             print(elapsed_time/1000)
@@ -122,7 +121,8 @@ while True:
                 led_rgb(Color.GREEN)
                 total_time=(elapsed_time+time)//1000
                 print(total_time,"s")
-                send_msg(1,[elapsed_time//1000],userId, destId)
+                if other_time==0:
+                    send_msg(1,[elapsed_time//1000],userId, destId)
                 print("msg sent")
                 display.scroll(str(total_time)+"s")
                 display.scroll(str(total_time)+"s")
